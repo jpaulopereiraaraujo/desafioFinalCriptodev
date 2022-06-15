@@ -9,6 +9,8 @@ contract VendingMachine {
     mapping (address => uint) private EthToBalances;
     uint256 private gamaBuyValue;
     uint256 private gamaSellValue;
+    uint256 private senderValue;
+    
 
     // Modifers
     modifier isOwner(){
@@ -20,16 +22,21 @@ contract VendingMachine {
 
     constructor(){
         owner = msg.sender;
-        gamaSellValue = 1;
-        gamaBuyValue = 1;
+        gamaSellValue = 2;
+        gamaBuyValue = 4;
+        
     }
 
     // Public Function
 
 		//Função para Compra de Gama por ETH na máquina de venda.
-    function purchaseGama(uint256 amount) public payable {
-				//um "if" pra indicar o valor mínimo de compra no caso é de 1 eth, já que no exemplo 1 eth = 1gama
-        require(msg.value >= amount * 1 ether, "You must buy at least 1 ether per Gama.");
+    function purchaseGama(uint256 amount) public payable  {
+        uint256 avaiableEther;
+        avaiableEther = msg.value/1000000000000000000;
+        require(avaiableEther*gamaSellValue == amount*gamaBuyValue,"Please quantity of ethers must be proportional to the price ratio");
+        //um "if" pra indicar o valor mínimo de compra no caso é de 1 eth, já que no exemplo 1 eth = 1gama
+        require(msg.value >= weiToEther(amount) ,"Erro, not enough ethers to trade.");
+        
 				//um "if" pra saber se existe gama suficiente pra vender na máquina da venda.
         require(GamaToBalances[address(this)] >= amount, "Not enough Gamas in stock to fulfill purchase request.");
 				//decremento do valor comprado em gama da máqunia
@@ -37,7 +44,8 @@ contract VendingMachine {
 				//incremento do valor comprado para carteira do comprador
         GamaToBalances[msg.sender] += amount;
 				//incremento do eth pago na transação para o saldo de ETH da máquina de venda
-        EthToBalances[address(this)] += msg.value;
+
+        
     }
 
 	    function sellingGama(uint256 amount) public payable {
@@ -72,7 +80,7 @@ contract VendingMachine {
     }
 
     function getVendingMachingBalanceEth() public view returns(uint256 EthToken){
-        return EthToBalances[address(this)];
+        return address(this).balance;
     }
 
     function setGamaSellValue(uint256 newValue) public isOwner{
