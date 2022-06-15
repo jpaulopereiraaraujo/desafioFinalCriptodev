@@ -153,8 +153,6 @@ describe("vending", async () => {
         expect(await tokenTest.weiToEther(1)).to.equal(oneEtherTest);
         expect(await tokenTest.weiToEther(2)).to.equal(twoEtherTest);
 
-        console.log(oneEtherTest);
-        console.log(twoEtherTest);
 
     });
 
@@ -170,19 +168,30 @@ describe("vending", async () => {
         await tokenTest.deployed();
 
 
-        await tokenTest.restockGama(1000000000000);
+        await tokenTest.restockGama(400);
+
+        await tokenTest.setGamaBuyValue(1);
+
+        await tokenTest.setGamaSellValue(2);
 
         /* expect(await tokenTest.contractBalance()).to.equal("52000000000000000000"); */
 
-        await tokenTest.purchaseGama(100,{
-            value: ethers.utils.parseEther("200")
+        await tokenTest.purchaseGama(320,{
+            value: ethers.utils.parseEther("160")
         });
 
+        //Teste do valor em ethers no caixa da máquina
+        expect("160000000000000000000").to.equal(await tokenTest.getVendingMachingBalanceEth());
 
-        console.log(await tokenTest.getVendingMachineBalanceGama());
+        //Teste do valor em gamas no caixa
+        expect(80).to.equal(await tokenTest.getVendingMachineBalanceGama());
 
-        console.log(await tokenTest.ownerBalance());
-        console.log(await tokenTest.getVendingMachingBalanceEth());
+        //Teste do valor em gamas no comprador
+        expect(await tokenTest.getBuyerBalanceGama()).to.equal(320);
+
+        
+
+
 
     });
 

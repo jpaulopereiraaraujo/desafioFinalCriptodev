@@ -22,9 +22,8 @@ contract VendingMachine {
 
     constructor(){
         owner = msg.sender;
-        gamaSellValue = 2;
-        gamaBuyValue = 4;
-        
+        gamaBuyValue =1;
+        gamaSellValue = 1;
     }
 
     // Public Function
@@ -35,7 +34,7 @@ contract VendingMachine {
         avaiableEther = msg.value/1000000000000000000;
         require(avaiableEther*gamaSellValue == amount*gamaBuyValue,"Please quantity of ethers must be proportional to the price ratio");
         //um "if" pra indicar o valor mínimo de compra no caso é de 1 eth, já que no exemplo 1 eth = 1gama
-        require(msg.value >= weiToEther(amount) ,"Erro, not enough ethers to trade.");
+        require(msg.value > 0 ,"Erro, not enough ethers to trade.");
         
 				//um "if" pra saber se existe gama suficiente pra vender na máquina da venda.
         require(GamaToBalances[address(this)] >= amount, "Not enough Gamas in stock to fulfill purchase request.");
@@ -79,9 +78,15 @@ contract VendingMachine {
 
     }
 
+    function getBuyerBalanceGama() public view returns(uint256 GamaToken){
+        return GamaToBalances[address(owner)];
+
+    }
+
     function getVendingMachingBalanceEth() public view returns(uint256 EthToken){
         return address(this).balance;
     }
+
 
     function setGamaSellValue(uint256 newValue) public isOwner{
         require(newValue > 0,"New value must be higher than 0.");
