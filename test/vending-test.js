@@ -1,3 +1,4 @@
+ 
 const { messagePrefix } = require("@ethersproject/hash");
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
@@ -172,4 +173,42 @@ describe("vending", async () => {
     //Teste do valor em gamas no comprador
     expect(await tokenTest.getBuyerBalanceGama()).to.equal(320);
   });
+
+  it("8 selling test", async function () {
+    const [owner, wallet1] = await ethers.getSigners();
+
+    const token = await ethers.getContractFactory("VendingMachine", {
+      signer: owner,
+    });
+
+    const tokenTest = await token.deploy();
+    await tokenTest.deployed();
+
+    await tokenTest.restockGama(1000);
+
+    await tokenTest.setGamaBuyValue(1);
+
+    await tokenTest.setGamaSellValue(2);
+
+    /* expect(await tokenTest.contractBalance()).to.equal("52000000000000000000"); */
+
+    await tokenTest.purchaseGama(600, {
+      value: ethers.utils.parseEther("300"),
+    });
+
+
+    await tokenTest.sellingGama(100);
+
+    expect("100000000000000000000").to.equal(await tokenTest.getVendingMachingBalanceEth());
+
+    expect(500).to.equal(await tokenTest.getBuyerBalanceGama());
+
+    expect(await tokenTest.getVendingMachineBalanceGama()).to.equal(500);
+    
+
+
+    
+
+  });
+
 });
