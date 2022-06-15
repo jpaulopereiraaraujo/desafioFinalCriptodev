@@ -1,78 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/jp/Área de Trabalho/workspaces/Solidity Workspaces/Dia-20/contracts/Greeter.sol": {
-      "lastModificationDate": 1654817647254,
-      "contentHash": "4ae3185cfebf8801b32aa6fd01b09362",
-      "sourceName": "contracts/Greeter.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": []
-    },
-    "/home/jp/Área de Trabalho/workspaces/Solidity Workspaces/Dia-20/node_modules/hardhat/console.sol": {
-      "lastModificationDate": 1654813752275,
-      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
-      "sourceName": "hardhat/console.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.4.22 <0.9.0"
-      ],
-      "artifacts": [
-        "console"
-      ]
-    },
-    "/home/jp/Área de Trabalho/workspaces/Solidity Workspaces/Dia-20/contracts/token.sol": {
-      "lastModificationDate": 1654820258659,
-      "contentHash": "e203e48eda1d22530b50d6422e72d8c8",
-      "sourceName": "contracts/token.sol",
+    "C:\\Users\\Guilherme\\Desktop\\Projetos Solidity\\desafioFinalCriptodev\\contracts\\libs.sol": {
+      "lastModificationDate": 1655311134089,
+      "contentHash": "2150482d1ce8e59ee8806f8fb0baf434",
+      "sourceName": "contracts/libs.sol",
       "solcConfig": {
         "version": "0.8.4",
         "settings": {
@@ -101,13 +33,12 @@
         ">=0.7.0 <0.9.0"
       ],
       "artifacts": [
-        "CryptoToken",
-        "IERC20"
+        "Math"
       ]
     },
-    "/home/jp/Área de Trabalho/workspaces/Solidity Workspaces/desafioMintBurnPause-main/contracts/token.sol": {
-      "lastModificationDate": 1654970763764,
-      "contentHash": "d62adabcee0ce33e452f630fd01e8ac7",
+    "C:\\Users\\Guilherme\\Desktop\\Projetos Solidity\\desafioFinalCriptodev\\contracts\\token.sol": {
+      "lastModificationDate": 1655321536627,
+      "contentHash": "6f0728b324260c15e2f363589bffcccd",
       "sourceName": "contracts/token.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -143,225 +74,9 @@
         "IERC20"
       ]
     },
-    "/home/jp/Área de Trabalho/workspaces/Solidity Workspaces/desafioMintBurnPause-main/contracts/libs.sol": {
-      "lastModificationDate": 1654956330627,
-      "contentHash": "d65a25e82f4f1e9c1a1c7819bb5771c2",
-      "sourceName": "contracts/libs.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.7.0 <0.9.0"
-      ],
-      "artifacts": [
-        "Math"
-      ]
-    },
-    "/home/jp/Área de Trabalho/workspaces/Solidity Workspaces/desafioFinal-hardhat/contracts/libs.sol": {
-      "lastModificationDate": 1655157688311,
-      "contentHash": "d65a25e82f4f1e9c1a1c7819bb5771c2",
-      "sourceName": "contracts/libs.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.7.0 <0.9.0"
-      ],
-      "artifacts": [
-        "Math"
-      ]
-    },
-    "/home/jp/Área de Trabalho/workspaces/Solidity Workspaces/desafioFinal-hardhat/contracts/token.sol": {
-      "lastModificationDate": 1655157688311,
-      "contentHash": "d62adabcee0ce33e452f630fd01e8ac7",
-      "sourceName": "contracts/token.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./libs.sol"
-      ],
-      "versionPragmas": [
-        ">=0.7.0 <0.9.0"
-      ],
-      "artifacts": [
-        "CryptoToken",
-        "IERC20"
-      ]
-    },
-    "/home/jp/Área de Trabalho/workspaces/Solidity Workspaces/desafioFinal-hardhat/contracts/vending.sol": {
-      "lastModificationDate": 1655262655095,
-      "contentHash": "5686f2d4f35416c0740e4d159250717f",
-      "sourceName": "contracts/vending.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">0.7.0 <0.9.0"
-      ],
-      "artifacts": [
-        "VendingMachine"
-      ]
-    },
-    "/home/jp/Área de Trabalho/Final/desafioFinalCriptodev/contracts/libs.sol": {
-      "lastModificationDate": 1655264092283,
-      "contentHash": "d65a25e82f4f1e9c1a1c7819bb5771c2",
-      "sourceName": "contracts/libs.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.7.0 <0.9.0"
-      ],
-      "artifacts": [
-        "Math"
-      ]
-    },
-    "/home/jp/Área de Trabalho/Final/desafioFinalCriptodev/contracts/token.sol": {
-      "lastModificationDate": 1655264092283,
-      "contentHash": "d62adabcee0ce33e452f630fd01e8ac7",
-      "sourceName": "contracts/token.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./libs.sol"
-      ],
-      "versionPragmas": [
-        ">=0.7.0 <0.9.0"
-      ],
-      "artifacts": [
-        "CryptoToken",
-        "IERC20"
-      ]
-    },
-    "/home/jp/Área de Trabalho/Final/desafioFinalCriptodev/contracts/vending.sol": {
-      "lastModificationDate": 1655298080329,
-      "contentHash": "4af293fcb8752d48c0f9f20c60dbfd5e",
+    "C:\\Users\\Guilherme\\Desktop\\Projetos Solidity\\desafioFinalCriptodev\\contracts\\vending.sol": {
+      "lastModificationDate": 1655311134089,
+      "contentHash": "49f1032655eb1494e5ee350c3a87f857",
       "sourceName": "contracts/vending.sol",
       "solcConfig": {
         "version": "0.8.4",

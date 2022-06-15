@@ -5,25 +5,16 @@ pragma solidity >=0.7.0 <0.9.0;
 import "./libs.sol";
 
 interface IERC20 {
-    //Implementado (mais ou menos)
     function totalSupply() external view returns (uint256);
-
     function balanceOf(address account) external view returns (uint256);
+    function allowence(address owner, address spender) external view returns(uint256);
 
-    function transfer(address recipient, uint256 amount)
-        external
-        returns (bool);
+    function transfer(address recipient, uint256 amount) external returns (bool);
+    function approve(address spender, uint256 amount) external returns(bool);
+    function transferFrom(address sender, address recipient, uint256 amount) external returns(bool);
 
-    //Não implementados (ainda)
-    //function allowence(address owner, address spender) external view returns(uint256);
-    //function approve(address spender, uint256 amount) external returns(bool);
-    //function transferFrom(address sender, address recipient, uint256 amount) external returns(bool);
-
-    //Implementado
     event Transfer(address from, address to, uint256 value);
-
-    //Não está implementado (ainda)
-    //event Approval(address owner, address spender, uint256 value);
+    event Approval(address owner, address spender, uint256 value);
 }
 
 contract CryptoToken is IERC20 {
@@ -31,7 +22,6 @@ contract CryptoToken is IERC20 {
     using Math for uint256;
 
     //Enums
-
     enum Status {
         ACTIVE,
         PAUSED,
@@ -51,13 +41,12 @@ contract CryptoToken is IERC20 {
     Status contractState;
 
     mapping(address => uint256) private addressToBalance;
+    mapping(address => mapping(address => uint256)) allowed;
 
     modifier isOwner() {
         require(address(msg.sender) == owner, "Sender is not owner!");
         _;
     }
-
-    // Events
 
     //Constructor
     constructor() {
@@ -78,10 +67,7 @@ contract CryptoToken is IERC20 {
         return totalsupply;
     }
 
-    function balanceOf(address tokenOwner)
-        public
-        view
-        override
+    function balanceOf(address tokenOwner) public view override
         returns (uint256)
     {
         require(
@@ -158,6 +144,26 @@ contract CryptoToken is IERC20 {
             addressToBalance[owner] += amount;
             emit Transfer(owner, owner, 50);
         }
+    }
+
+    function approve(address spender, uint256 numTokens) public override returns(bool){
+        allowed[msg.sender][spender] = numTokens;
+        emit Approval(msg.sender, spender, numTokens);
+        return true;
+    }
+
+    function allowence(address ownerToken, address spender) public override view returns(uint256){
+        return allowed[ownerToken][spender];
+    }
+
+    function transferFrom(address sender, address recipient, uint256 amount) public override returns(bool){
+        require(amount <= addressToBalance[sender], "Sender Insufficient Balance to Transfer");
+        require(amount <= allowed[sender][msg.sender], "Allowed Insufficient Balance to Transfer");
+        addressToBalance[sender] -= amount;
+        allowed[sender][msg.sender] -= amount;
+        addressToBalance[recipient] += amount;
+        emit Transfer(sender, recipient, amount);
+        return true;
     }
 
     function state() public view returns (Status) {
