@@ -190,7 +190,7 @@ describe("token", async () => {
     expect(await tokenTest.balanceOf(wallet1.address)).to.equal(49);
   });
 
-  it("Approve/Alowwence", async function () {
+  it("Approve/Alowence", async function () {
     const [owner, wallet1] = await ethers.getSigners();
     const token = await ethers.getContractFactory("CryptoToken", {
       libraries: { Math: libTest.address },
@@ -203,26 +203,21 @@ describe("token", async () => {
       50
     );
   });
+
+  it("TransferFrom", async function () {
+    const [owner, wallet1, wallet2] = await ethers.getSigners();
+    const token = await ethers.getContractFactory("CryptoToken", {
+      libraries: { Math: libTest.address },
+      signer: owner,
+    });
+    const tokenTest = await token.deploy();
+    await tokenTest.deployed();
+    await tokenTest.approve(wallet1.address, 50);
+    expect(await tokenTest.allowence(owner.address, wallet1.address)).to.equal(
+      50
+    );
+    await tokenTest
+      .connect(wallet1)
+      .transferFrom(owner.address, wallet2.address, "50");
+  });
 });
-
-// TODO: FALTA IMPLEMENTAR ESSE TESTE
-
-//   it("TransferFrom", async function () {
-//     const [owner, wallet1, wallet2] = await ethers.getSigners();
-//     const token = await ethers.getContractFactory("CryptoToken", {
-//       libraries: { Math: libTest.address },
-//       signer: owner,
-//     });
-//     const tokenTest = await token.deploy();
-//     await tokenTest.deployed();
-//     await tokenTest.approve(wallet1.address, 50);
-//     // await ethers.getContractFactory({
-//     //   //   libraries: { Math: libTest.address },
-//     //   signer: wallet1,
-//     // });
-//     // await ethers.getSigner(wallet1.address);
-//     // await Signer.call(wallet1);
-//     // console.log(await Signer.call(wallet1));
-//     // await tokenTest.transferFrom(owner.address, wallet2.address, 50);
-//   });
-// });

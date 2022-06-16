@@ -165,7 +165,7 @@ contract CryptoToken is IERC20 {
         emit Transfer(sender, recipient, amount);
         return true;
     }
-
+    
     function state() public view returns (Status) {
         return contractState;
     }
