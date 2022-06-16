@@ -37,8 +37,8 @@
       ]
     },
     "C:\\Users\\Guilherme\\Desktop\\Projetos Solidity\\desafioFinalCriptodev\\contracts\\token.sol": {
-      "lastModificationDate": 1655321536627,
-      "contentHash": "6f0728b324260c15e2f363589bffcccd",
+      "lastModificationDate": 1655340753449,
+      "contentHash": "b607e1a8cb9021c4c7509a0b95b7e02d",
       "sourceName": "contracts/token.sol",
       "solcConfig": {
         "version": "0.8.4",
