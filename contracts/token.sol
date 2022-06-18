@@ -50,7 +50,7 @@ contract CryptoToken is IERC20 {
 
     //Constructor
     constructor() {
-        uint256 total = 100;
+        uint256 total = 1000;
         totalsupply = total;
         owner = msg.sender;
         addressToBalance[owner] = totalsupply;
@@ -133,16 +133,16 @@ contract CryptoToken is IERC20 {
     }
 
     //Mint: Adicionar tokens ao total supply
-    function mintToken() public isOwner {
+    function mintToken() public isOwner{
         require(
             contractState == Status.ACTIVE,
             "The Contract is not available now :("
         );
-        uint256 amount = 50;
-        if (balanceOf(owner) < 51) {
+        uint256 amount = 1000;
+        if (balanceOf(owner) < 1001) {
             totalsupply += amount;
             addressToBalance[owner] += amount;
-            emit Transfer(owner, owner, 50);
+            emit Transfer(owner, owner, 1000);
         }
     }
 
@@ -165,6 +165,10 @@ contract CryptoToken is IERC20 {
         emit Transfer(sender, recipient, amount);
         return true;
     }
+
+    function getOwner() public view returns(address){
+        return owner;
+    }
     
     function state() public view returns (Status) {
         return contractState;
@@ -174,15 +178,15 @@ contract CryptoToken is IERC20 {
         contractState = Status.CANCELLED;
     }
 
-    function pauseContract() public isOwner {
+    function pauseContract() public isOwner{
         contractState = Status.PAUSED;
     }
 
-    function activeContract() public isOwner {
+    function activeContract() public isOwner{
         contractState = Status.ACTIVE;
     }
 
-    function kill() public isOwner {
+    function kill() public isOwner{
         require(contractState == Status.CANCELLED, "The contract is active");
         contractState = Status.KILLED;
         selfdestruct(payable(owner));
