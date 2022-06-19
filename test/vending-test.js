@@ -1,13 +1,29 @@
- 
 const { messagePrefix } = require("@ethersproject/hash");
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("vending", async () => {
+    
+    let libTest,token, tokenTest, VENDING, vending;
+    
+
+    beforeEach(async () => {
+    const lib = await ethers.getContractFactory("Math");
+    libTest = await lib.deploy();
+    
+
+    
+
+    
+  });
+
+
+
   it("1 restock gama-Test", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
-    const token = await ethers.getContractFactory("VendingMachine", {
+    const token = await ethers.getContractFactory("CryptoToken", {
+      libraries: { Math: libTest.address },
       signer: owner,
     });
 
@@ -15,17 +31,38 @@ describe("vending", async () => {
 
     await tokenTest.deployed();
 
-    await tokenTest.restockGama(100);
+    const VENDING = await ethers.getContractFactory("VendingMachine");
+    const vending = await VENDING.deploy(tokenTest.address);
+    await vending.deployed();
 
-    console.log(await tokenTest.getVendingMachineBalanceGama());
+    await vending.restockGama();
 
-    expect(100).to.equal(await tokenTest.getVendingMachineBalanceGama());
+
+    expect(1000).to.equal(await vending.getVendingMachineBalanceGama());
+    
+    
+    
+    
+    await vending.purchaseGama(1000, {
+      value: ethers.utils.parseEther("1000"),
+
+      
+    });
+
+    expect(1000).to.equal(await vending.getVendingMachineBalanceGama());
+
+    expect(await vending.contractBalance()).to.equal("1000000000000000000000")
+
+    
+    expect(1000).to.equal(await vending.getVendingMachineBalanceGama());
   });
 
-  it("2 restock gama-Test - negative", async function () {
+ 
+   it("2 restock Test-ether-exchange", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
-    const token = await ethers.getContractFactory("VendingMachine", {
+    const token = await ethers.getContractFactory("CryptoToken", {
+      libraries: { Math: libTest.address },
       signer: owner,
     });
 
@@ -33,56 +70,45 @@ describe("vending", async () => {
 
     await tokenTest.deployed();
 
-    console.log(await tokenTest.getVendingMachineBalanceGama());
-
-    await expect(tokenTest.restockGama(0)).to.be.revertedWith(
-      "You can't restock 0 or less Gamas."
-    );
-  });
-
-  it("3 restock Test-ether-exchange", async function () {
-    const [owner, wallet1] = await ethers.getSigners();
-
-    const token = await ethers.getContractFactory("VendingMachine", {
-      signer: owner,
-    });
-
-    const tokenTest = await token.deploy();
-
-    await tokenTest.deployed();
+    const VENDING = await ethers.getContractFactory("VendingMachine");
+    const vending = await VENDING.deploy(tokenTest.address);
+    await vending.deployed();
+    
     //console.log(taxchange)
-    //await tokenTest.connect(wallet1); modifica a carteira de ethers da transação
+    //await vending.connect(wallet1); modifica a carteira de ethers da transação
 
-    const restockEth = await tokenTest.restockEth({
+    const restockEth = await vending.restockEth({
       value: ethers.utils.parseEther("50.0"),
     }); //juntamente com o restockEth() passa o valor em ethers para o contrato
 
     await restockEth.wait();
 
-    expect(await tokenTest.contractBalance()).to.equal("50000000000000000000");
+    expect(await vending.contractBalance()).to.equal("50000000000000000000");
   });
 
   it("4 restock Test-ether-exchange -negative", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
-    const token = await ethers.getContractFactory("VendingMachine", {
+    const token = await ethers.getContractFactory("CryptoToken", {
+      libraries: { Math: libTest.address },
       signer: owner,
     });
 
     const tokenTest = await token.deploy();
 
     await tokenTest.deployed();
+
+    const VENDING = await ethers.getContractFactory("VendingMachine");
+    const vending = await VENDING.deploy(tokenTest.address);
+    await vending.deployed();
+
+  
     //console.log(taxchange)
-    //await tokenTest.connect(wallet1); modifica a carteira de ethers da transação
+    //await vending.connect(wallet1); modifica a carteira de ethers da transação
 
-    /* const restockEth = await tokenTest.restockEth({
-            value: ethers.utils.parseEther("0")
-        }); //juntamente com o restockEth() passa o valor em ethers para o contrato
-
-        await restockEth.wait(); */
 
     await expect(
-      tokenTest.restockEth({
+      vending.restockEth({
         value: ethers.utils.parseEther("0"),
       })
     ).to.be.revertedWith("You can't restock 0 or less Ethers.");
@@ -91,25 +117,31 @@ describe("vending", async () => {
   it("5 withdraw-test", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
-    const token = await ethers.getContractFactory("VendingMachine", {
+    const token = await ethers.getContractFactory("CryptoToken", {
+      libraries: { Math: libTest.address },
       signer: owner,
     });
 
     const tokenTest = await token.deploy();
+
     await tokenTest.deployed();
 
-    const firstBalance = await tokenTest.ownerBalance();
+    const VENDING = await ethers.getContractFactory("VendingMachine");
+    const vending = await VENDING.deploy(tokenTest.address);
+    await vending.deployed();
+    
+    const firstBalance = await vending.ownerBalance();
 
-    const restockEth = await tokenTest.restockEth({
+    const restockEth = await vending.restockEth({
       value: ethers.utils.parseEther("50.0"),
     });
     await restockEth.wait();
 
     const valueToWithdraw = 50;
-    await tokenTest.toWithdraw(valueToWithdraw);
+    await vending.toWithdraw(valueToWithdraw);
 
     // doc das operações com BigNumber>>"https://docs.ethers.io/v5/api/utils/bignumber/"
-    const newBalance = await tokenTest.ownerBalance();
+    const newBalance = await vending.ownerBalance();
 
     //Primeiro calcula o tax exchange, subtraindo o valor anterior do posterior
     const taxchange = firstBalance.sub(newBalance);
@@ -120,90 +152,111 @@ describe("vending", async () => {
     //assim >>>> novo saldo + transferência = saldo anterior<<< tem q ser verdadeiro
     expect(balanceAfterWithdrawPlusTax).to.equal(firstBalance);
 
-    expect(await tokenTest.contractBalance()).to.equal("0");
+    expect(await vending.contractBalance()).to.equal("0");
   });
 
   it("6 conversion weiEther test", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
-    const token = await ethers.getContractFactory("VendingMachine", {
+    const token = await ethers.getContractFactory("CryptoToken", {
+      libraries: { Math: libTest.address },
       signer: owner,
     });
 
     const tokenTest = await token.deploy();
+
     await tokenTest.deployed();
+
+    const VENDING = await ethers.getContractFactory("VendingMachine");
+    const vending = await VENDING.deploy(tokenTest.address);
+    await vending.deployed();
+
 
     const oneEtherTest = "1000000000000000000";
     const twoEtherTest = "2000000000000000000";
 
-    expect(await tokenTest.weiToEther(1)).to.equal(oneEtherTest);
-    expect(await tokenTest.weiToEther(2)).to.equal(twoEtherTest);
+    expect(await vending.weiToEther(1)).to.equal(oneEtherTest);
+    expect(await vending.weiToEther(2)).to.equal(twoEtherTest);
   });
-
-  it("7 purchase test", async function () {
+ 
+   it("7 purchase test", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
-    const token = await ethers.getContractFactory("VendingMachine", {
-      signer: wallet1,
+    const token = await ethers.getContractFactory("CryptoToken", {
+      libraries: { Math: libTest.address },
+      signer: owner,
     });
 
     const tokenTest = await token.deploy();
+
     await tokenTest.deployed();
 
-    await tokenTest.restockGama(400);
+    
 
-    await tokenTest.setGamaBuyValue(1);
+    const VENDING = await ethers.getContractFactory("VendingMachine");
+    const vending = await VENDING.deploy(tokenTest.address);
+    await vending.deployed();
 
-    await tokenTest.setGamaSellValue(2);
+    await vending.setGamaBuyValue(2);
 
-    /* expect(await tokenTest.contractBalance()).to.equal("52000000000000000000"); */
+    await vending.restockGama();
 
-    await tokenTest.purchaseGama(320, {
+    await vending.purchaseGama(320, {
       value: ethers.utils.parseEther("160"),
     });
 
     //Teste do valor em ethers no caixa da máquina
     expect("160000000000000000000").to.equal(
-      await tokenTest.getVendingMachingBalanceEth()
+      await vending.getVendingMachingBalanceEth()
     );
 
     //Teste do valor em gamas no caixa
-    expect(80).to.equal(await tokenTest.getVendingMachineBalanceGama());
+    expect(680).to.equal(await vending.getVendingMachineBalanceGama());
 
     //Teste do valor em gamas no comprador
-    expect(await tokenTest.getBuyerBalanceGama()).to.equal(320);
+    expect(await vending.getBuyerBalanceGama()).to.equal(320);
   });
 
   it("8 selling test", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
-    const token = await ethers.getContractFactory("VendingMachine", {
+    const token = await ethers.getContractFactory("CryptoToken", {
+      libraries: { Math: libTest.address },
       signer: owner,
     });
 
     const tokenTest = await token.deploy();
+
     await tokenTest.deployed();
 
-    await tokenTest.restockGama(1000);
+    const VENDING = await ethers.getContractFactory("VendingMachine");
+    const vending = await VENDING.deploy(tokenTest.address);
+    await vending.deployed();
 
-    await tokenTest.setGamaBuyValue(1);
+    await vending.restockGama();
 
-    await tokenTest.setGamaSellValue(2);
+    await vending.setGamaBuyValue(1);
 
-    /* expect(await tokenTest.contractBalance()).to.equal("52000000000000000000"); */
+    await vending.setGamaSellValue(2);
 
-    await tokenTest.purchaseGama(600, {
-      value: ethers.utils.parseEther("300"),
+    expect(await vending.contractBalance()).to.equal("0");
+
+    await vending.purchaseGama(600, {
+      value: ethers.utils.parseEther("600"),
     });
 
+    console.log(await vending.getVendingMachingBalanceEth());
 
-    await tokenTest.sellingGama(100);
 
-    expect("100000000000000000000").to.equal(await tokenTest.getVendingMachingBalanceEth());
+    await vending.sellingGama(100);
 
-    expect(500).to.equal(await tokenTest.getBuyerBalanceGama());
+    console.log(await vending.getVendingMachingBalanceEth());
 
-    expect(await tokenTest.getVendingMachineBalanceGama()).to.equal(500);
+    expect("400000000000000000000").to.equal(await vending.getVendingMachingBalanceEth());
+
+    expect(500).to.equal(await vending.getBuyerBalanceGama());
+
+    expect(await vending.getVendingMachineBalanceGama()).to.equal(500);
     
 
 
