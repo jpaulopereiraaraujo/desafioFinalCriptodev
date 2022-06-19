@@ -22,20 +22,26 @@ describe("token", async () => {
 
     await tokenTest.deployed();
 
-    const totalSupplyExpected = 100;
+    const VENDING = await ethers.getContractFactory("VendingMachine");
+    const vending = await VENDING.deploy(tokenTest.address);
+    await vending.deployed();
+ 
+
+
+    const totalSupplyExpected = 1000;
 
     const totalSupplyResult = await tokenTest.totalSupply();
 
     expect(totalSupplyExpected).to.equal(totalSupplyResult);
 
     //Teste do balance do owner
-    const balanceExpected = 100;
+    const balanceExpected = 1000;
     const balanceResult = await tokenTest.balanceOf(owner.address);
 
     expect(balanceExpected).to.equal(balanceResult);
   });
 
-  it("Transfer test", async function () {
+   it("Transfer test", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
     const token = await ethers.getContractFactory("CryptoToken", {
@@ -49,7 +55,7 @@ describe("token", async () => {
 
     const transferValue = 40;
     const balanceWallet1Expected = 40;
-    const balanceOwnerExpected = 60;
+    const balanceOwnerExpected = 960;
 
     //Testando a função transfer
     await tokenTest.transfer(wallet1.address, transferValue);
@@ -67,6 +73,8 @@ describe("token", async () => {
     expect(balanceWallet1Expected).to.equal(bWallet1);
   });
 
+  
+
   it("Transfer Failtest", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
@@ -79,7 +87,7 @@ describe("token", async () => {
 
     await tokenTest.deployed();
 
-    const transferValue = 200;
+    const transferValue = 1001;
     const test = 1;
     const pass = 1;
     const fail = 0;
@@ -92,6 +100,8 @@ describe("token", async () => {
       expect(fail).to.equal(test);
     }
   });
+
+ 
 
   it("Burn Test", async function () {
     const [owner, wallet1] = await ethers.getSigners();
@@ -107,7 +117,7 @@ describe("token", async () => {
 
     const transferValue = 40;
     const balanceWallet1Expected = 20;
-    const balanceOwnerExpected = 30;
+    const balanceOwnerExpected = 480;
 
     await tokenTest.transfer(wallet1.address, transferValue);
 
@@ -125,6 +135,8 @@ describe("token", async () => {
 
     expect(balanceWallet1Expected).to.equal(bWallet1);
   });
+
+   
 
   it("Status test", async function () {
     const [owner, wallet1] = await ethers.getSigners();
@@ -148,6 +160,8 @@ describe("token", async () => {
     expect(await tokenTest.state()).to.equal(2);
   });
 
+  
+
   it("Mint test A", async function () {
     const [owner, wallet1] = await ethers.getSigners();
 
@@ -164,10 +178,12 @@ describe("token", async () => {
 
     await tokenTest.mintToken();
 
-    expect(await tokenTest.totalSupply()).to.equal(150);
-    expect(await tokenTest.balanceOf(owner.address)).to.equal(80);
+    expect(await tokenTest.totalSupply()).to.equal(2000);
+    expect(await tokenTest.balanceOf(owner.address)).to.equal(1930);
     expect(await tokenTest.balanceOf(wallet1.address)).to.equal(70);
   });
+
+ 
 
   it("Mint test B", async function () {
     const [owner, wallet1] = await ethers.getSigners();
@@ -185,10 +201,12 @@ describe("token", async () => {
 
     await tokenTest.mintToken();
 
-    expect(await tokenTest.totalSupply()).to.equal(100);
-    expect(await tokenTest.balanceOf(owner.address)).to.equal(51);
+    expect(await tokenTest.totalSupply()).to.equal(2000);
+    expect(await tokenTest.balanceOf(owner.address)).to.equal(1951);
     expect(await tokenTest.balanceOf(wallet1.address)).to.equal(49);
   });
+
+   
 
   it("Approve/Alowence", async function () {
     const [owner, wallet1] = await ethers.getSigners();
@@ -203,6 +221,8 @@ describe("token", async () => {
       50
     );
   });
+
+  
 
   it("TransferFrom", async function () {
     const [owner, wallet1, wallet2] = await ethers.getSigners();
@@ -219,5 +239,8 @@ describe("token", async () => {
     await tokenTest
       .connect(wallet1)
       .transferFrom(owner.address, wallet2.address, "50");
+
+      console.log(owner.address);
   });
+
 });
