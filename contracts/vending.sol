@@ -6,7 +6,7 @@ import "./token.sol";
 contract VendingMachine {
 
     // Properties
-    address public owner;
+    address public owner2;
     mapping (address => uint) public GamaToBalances;
     uint256 private gamaBuyValue;
     uint256 private gamaSellValue;
@@ -19,21 +19,22 @@ contract VendingMachine {
     event Transfer(address from, address to, uint256 value);
 
     // Modifers
-    modifier isOwner(){
-        require(msg.sender == owner, "Only the onwer can make this");
+    modifier isOwner2(){
+        require(msg.sender == owner2, "Only the onwer can make this");
         _;
     }
 
     //Constructor
 
     constructor(address contractAddress){
-        owner = CryptoToken(contractAddress).getOwner();
+      
+        owner2 = msg.sender;
         gamaBuyValue = 1;
         gamaSellValue = 1;
         ethBuyValue = 1;
         ethSellValue = 1;
         tokenAddress = contractAddress;
-        restockGama();
+        //restockGama();
     }
 
     // Public Function
@@ -88,7 +89,7 @@ contract VendingMachine {
     }
 
     function getBuyerBalanceGama() public view returns(uint256 GamaToken){
-        return GamaToBalances[address(owner)];
+        return GamaToBalances[address(owner2)];
 
     }
 
@@ -97,20 +98,20 @@ contract VendingMachine {
     }
 
 
-    function setGamaSellValue(uint256 newValue) public isOwner{
+    function setGamaSellValue(uint256 newValue) public isOwner2{
         require(newValue > 0,"New value must be higher than 0.");
         gamaSellValue = newValue;
 
     }
 
-    function setGamaBuyValue(uint256 newValue) public isOwner{
+    function setGamaBuyValue(uint256 newValue) public isOwner2{
         require(newValue > 0,"New value must be higher than 0.");
         gamaBuyValue = newValue;
     }
 
     //Funções de manutenção
 
-    function restockGama() private isOwner{
+    function restockGama() public isOwner2 {
         if(getVendingMachineBalanceGama() == 0){
           uint256 amountGama = 1000;
           require(amountGama > 0,"You can't restock 0 or less Gamas.");
@@ -120,9 +121,13 @@ contract VendingMachine {
           emit Transfer(tokenAddress, address(this), amountGama);
         }
     }
+
+    function getOwner() public view returns(address){
+      return msg.sender;
+    }
   
 
-    function restockEth() public payable isOwner{
+    function restockEth() public payable isOwner2{
         require(msg.value >0,"You can't restock 0 or less Ethers.");
         
     }
@@ -132,10 +137,10 @@ contract VendingMachine {
     }
 
     function ownerBalance() public view returns(uint256){
-      return address(owner).balance;
+      return address(owner2).balance;
     }
 
-    function toWithdraw(uint256 amountWithdraw) public payable isOwner{
+    function toWithdraw(uint256 amountWithdraw) public payable isOwner2{
         require(amountWithdraw <= address(this).balance, "Not enough eth to withdraw.");
         payable(msg.sender).transfer(weiToEther(amountWithdraw));
         emit Transfer(address(this), msg.sender, amountWithdraw);
