@@ -77,7 +77,7 @@ contract CryptoToken is IERC20 {
         return addressToBalance[tokenOwner];
     }
 
-    function burn(uint256 value) public returns (bool) {
+    function burn(uint256 value) public isOwner returns (bool) {
         //require(contractState == Status.ACTIVE,"The Airdrop is not available now :(");
         require(
             contractState == Status.ACTIVE,
@@ -100,7 +100,7 @@ contract CryptoToken is IERC20 {
         return true;
     }
 
-    function autoBurn(uint256 value) public  {
+    function autoBurn(uint256 value) public isOwner {
         require(
             contractState == Status.ACTIVE,
             "The Contract is not available now :("
@@ -112,8 +112,10 @@ contract CryptoToken is IERC20 {
     function transfer(address receiver, uint256 quantity)
         public
         override
+        isOwner
         returns (bool)
     {
+
         require(
             contractState == Status.ACTIVE,
             "The Contract is not available now :("
@@ -132,7 +134,7 @@ contract CryptoToken is IERC20 {
     }
 
     //Mint: Adicionar tokens ao total supply
-    function mintToken() public {
+    function mintToken() public isOwner {
         require(
             contractState == Status.ACTIVE,
             "The Contract is not available now :("
@@ -145,7 +147,7 @@ contract CryptoToken is IERC20 {
         }
     }
 
-    function approve(address spender, uint256 numTokens) public override  returns(bool){
+    function approve(address spender, uint256 numTokens) public  isOwner override  returns(bool){
         allowed[msg.sender][spender] = numTokens;
         emit Approval(msg.sender, spender, numTokens);
         return true;
@@ -155,37 +157,37 @@ contract CryptoToken is IERC20 {
         return allowed[ownerToken][spender];
     }
 
-    function transferFrom(address sender, address recipient, uint256 amount) public override  returns(bool){
-        require(amount <= addressToBalance[sender], "Sender Insufficient Balance to Transfer");
-        require(amount <= allowed[sender][msg.sender], "Allowed Insufficient Balance to Transfer");
-        addressToBalance[sender] -= amount;
-        allowed[sender][msg.sender] -= amount;
-        addressToBalance[recipient] += amount;
-        emit Transfer(sender, recipient, amount);
+    function transferFrom(address from, address to, uint256 amount) public override  returns(bool){
+        require(amount <= addressToBalance[from], "Sender Insufficient Balance to Transfer");
+        require(amount <= allowed[from][msg.sender], "Allowed Insufficient Balance to Transfer");
+        addressToBalance[from] -= amount;
+        allowed[from][msg.sender] -= amount;
+        addressToBalance[to] += amount;
+        emit Transfer(from, to, amount);
         return true;
     }
 
     function getOwner() public view returns(address){
-        return owner;
+        return address(owner);
     }
     
     function state() public view returns (Status) {
         return contractState;
     }
 
-    function cancelContract() public  {
+    function cancelContract() public isOwner  {
         contractState = Status.CANCELLED;
     }
 
-    function pauseContract() public {
+    function pauseContract() public isOwner {
         contractState = Status.PAUSED;
     }
 
-    function activeContract() public {
+    function activeContract() public isOwner {
         contractState = Status.ACTIVE;
     }
 
-    function kill() public {
+    function kill() public isOwner {
         require(contractState == Status.CANCELLED, "The contract is active");
         contractState = Status.KILLED;
         selfdestruct(payable(owner));
