@@ -55,7 +55,7 @@ contract VendingMachine {
         GamaToBalances[msg.sender] += amount;
 				//incremento do eth pago na transação para o saldo de ETH da máquina de venda
         emit Transfer(address(this), msg.sender, amount);
-        restockGama();
+        
     }
 
 	    function sellingGama(uint256 amount) public payable {
@@ -112,18 +112,17 @@ contract VendingMachine {
     //Funções de manutenção
 
     function restockGama() public isOwner2 {
-        if(getVendingMachineBalanceGama() == 0){
+          require(getVendingMachineBalanceGama() < 50,"You need to have less than 50 to restock.");
           uint256 amountGama = 1000;
           require(amountGama > 0,"You can't restock 0 or less Gamas.");
-          CryptoToken(tokenAddress).transfer(address(this), amountGama);
+          
+          CryptoToken(tokenAddress).transferFrom(owner2, address(this), amountGama);
           GamaToBalances[address(this)] += amountGama;
-          CryptoToken(tokenAddress).mintToken();
-          emit Transfer(tokenAddress, address(this), amountGama);
-        }
+          /* CryptoToken(tokenAddress).mintToken(); */
     }
 
     function getOwner() public view returns(address){
-      return msg.sender;
+        return address(owner2);
     }
   
 
