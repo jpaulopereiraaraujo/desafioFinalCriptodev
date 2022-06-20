@@ -10,11 +10,7 @@ contract VendingMachine {
     mapping (address => uint) public GamaToBalances;
     uint256 private gamaBuyValue;
     uint256 private gamaSellValue;
-    uint256 private ethBuyValue;
-    uint256 private ethSellValue;
-    uint256 private senderValue;
     address private tokenAddress;
-
 
     event Transfer(address from, address to, uint256 value);
 
@@ -25,52 +21,32 @@ contract VendingMachine {
     }
 
     //Constructor
-
     constructor(address contractAddress){
-      
         owner2 = msg.sender;
         gamaBuyValue = 1;
         gamaSellValue = 1;
-        ethBuyValue = 1;
-        ethSellValue = 1;
         tokenAddress = contractAddress;
-        //restockGama();
     }
 
     // Public Function
 
 		//Função para Compra de Gama por ETH na máquina de venda.
-    function purchaseGama(uint256 amount) public payable  {
+    function purchaseGama(uint256 amount) public payable{
         uint256 avaiableEther;
         avaiableEther = msg.value/1000000000000000000;
         require(avaiableEther*gamaBuyValue == amount,"Please quantity of ethers must be proportional to the price ratio");
-        //um "if" pra indicar o valor mínimo de compra no caso é de 1 eth, já que no exemplo 1 eth = 1gama
         require(msg.value > 0 ,"Erro, not enough ethers to trade.");
         
-				//um "if" pra saber se existe gama suficiente pra vender na máquina da venda.
         require(GamaToBalances[address(this)] >= amount, "Not enough Gamas in stock to fulfill purchase request.");
-				//decremento do valor comprado em gama da máqunia
         GamaToBalances[address(this)] -= amount;
-				//incremento do valor comprado para carteira do comprador
         GamaToBalances[msg.sender] += amount;
-				//incremento do eth pago na transação para o saldo de ETH da máquina de venda
         emit Transfer(address(this), msg.sender, amount);
-        
     }
 
-	    function sellingGama(uint256 amount) public payable {
-			//Aqui são os mesmo comentários do de compra só que pro de venda.
-        //require(GamaToBalances[msg.sender] >= amount * 1 ether, "You must Sell at least 1 ether in Gama.");
+	  function sellingGama(uint256 amount) public{
         require(GamaToBalances[msg.sender] >= amount, "Not enough Gamas to trade for ether.");
         GamaToBalances[msg.sender] -= amount;
         GamaToBalances[address(this)] += amount;
-				//essas duas ultimas linhas estão diferentes da função de cima por causa de 
-        //um detalhe que percebi, se agente coloca apenas 
-			  //"EthToBalances[address(this)] -= amount" eu estaria adicionado o valor em wei
-        //então quando a carteira vendesse 1 gama = 1 eth a gente receberia 1 wei, 
-				//por isso criei uma var weiToEther com o valor de 1 eth em wei ai 
-				// só multiplicar o amount pela weiToEther que temos o valor em ETHER, 
-        //deu pra sacar? 
         payable(msg.sender).transfer(weiToEther(amount)*gamaSellValue);
         emit Transfer(msg.sender, address(this), amount);
     }
@@ -82,10 +58,8 @@ contract VendingMachine {
     }
 
     //Functions Getters and Setters
-
     function getVendingMachineBalanceGama() public view returns(uint256 GamaToken){
         return GamaToBalances[address(this)];
-
     }
 
     function getBuyerBalanceGama() public view returns(uint256 GamaToken){
@@ -97,11 +71,9 @@ contract VendingMachine {
         return address(this).balance;
     }
 
-
     function setGamaSellValue(uint256 newValue) public isOwner2{
         require(newValue > 0,"New value must be higher than 0.");
         gamaSellValue = newValue;
-
     }
 
     function setGamaBuyValue(uint256 newValue) public isOwner2{
@@ -110,33 +82,29 @@ contract VendingMachine {
     }
 
     //Funções de manutenção
-
     function restockGama() public isOwner2 {
-          require(getVendingMachineBalanceGama() < 50,"You need to have less than 50 to restock.");
-          uint256 amountGama = 1000;
-          require(amountGama > 0,"You can't restock 0 or less Gamas.");
+        require(getVendingMachineBalanceGama() < 50,"You need to have less than 50 to restock.");
+        uint256 amountGama = 1000;
+        require(amountGama > 0,"You can't restock 0 or less Gamas.");
           
-          CryptoToken(tokenAddress).transferFrom(owner2, address(this), amountGama);
-          GamaToBalances[address(this)] += amountGama;
-          /* CryptoToken(tokenAddress).mintToken(); */
+        CryptoToken(tokenAddress).transferFrom(owner2, address(this), amountGama);
+        GamaToBalances[address(this)] += amountGama;
     }
 
     function getOwner() public view returns(address){
         return address(owner2);
     }
   
-
     function restockEth() public payable isOwner2{
-        require(msg.value >0,"You can't restock 0 or less Ethers.");
-        
+        require(msg.value > 0,"You can't restock 0 or less Ethers.");
     }
 
     function contractBalance () public view returns(uint256) {
-      return address(this).balance;
+        return address(this).balance;
     }
 
     function ownerBalance() public view returns(uint256){
-      return address(owner2).balance;
+        return address(owner2).balance;
     }
 
     function toWithdraw(uint256 amountWithdraw) public payable isOwner2{
@@ -144,9 +112,4 @@ contract VendingMachine {
         payable(msg.sender).transfer(weiToEther(amountWithdraw));
         emit Transfer(address(this), msg.sender, amountWithdraw);
     }
-
-    // Private Functions
-    
-
-    
 }

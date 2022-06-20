@@ -108,6 +108,116 @@
       "artifacts": [
         "VendingMachine"
       ]
+    },
+    "C:\\Users\\Guilherme\\Desktop\\aaaaaa\\desafioFinalCriptodev\\contracts\\libs.sol": {
+      "lastModificationDate": 1655747769783,
+      "contentHash": "9e6490e329c6fda0aab7719752d61b0f",
+      "sourceName": "contracts/libs.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.7.0 <0.9.0"
+      ],
+      "artifacts": [
+        "Math"
+      ]
+    },
+    "C:\\Users\\Guilherme\\Desktop\\aaaaaa\\desafioFinalCriptodev\\contracts\\token.sol": {
+      "lastModificationDate": 1655747552911,
+      "contentHash": "fa68ff350d27d23d5f9f53dbcb238b5d",
+      "sourceName": "contracts/token.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./libs.sol"
+      ],
+      "versionPragmas": [
+        ">=0.7.0 <0.9.0"
+      ],
+      "artifacts": [
+        "CryptoToken",
+        "IERC20"
+      ]
+    },
+    "C:\\Users\\Guilherme\\Desktop\\aaaaaa\\desafioFinalCriptodev\\contracts\\vending.sol": {
+      "lastModificationDate": 1655748256330,
+      "contentHash": "3f9872abcf57ddf18584250b38b15f41",
+      "sourceName": "contracts/vending.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./token.sol"
+      ],
+      "versionPragmas": [
+        ">0.7.0 <0.9.0"
+      ],
+      "artifacts": [
+        "VendingMachine"
+      ]
     }
   }
 }

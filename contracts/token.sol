@@ -60,70 +60,37 @@ contract CryptoToken is IERC20 {
 
     //Public Functions
     function totalSupply() public view override returns (uint256) {
-        require(
-            contractState == Status.ACTIVE,
-            "The Contract is not available now :("
-        );
+        require(contractState == Status.ACTIVE,"The Contract is not available now :(");
         return totalsupply;
     }
 
-    function balanceOf(address tokenOwner) public view override
-        returns (uint256)
-    {
-        require(
-            contractState == Status.ACTIVE,
-            "The Contract is not available now :("
-        );
+    function balanceOf(address tokenOwner) public view override returns (uint256){
+        require(contractState == Status.ACTIVE,"The Contract is not available now :(");
         return addressToBalance[tokenOwner];
     }
 
     function burn(uint256 value) public isOwner returns (bool) {
-        //require(contractState == Status.ACTIVE,"The Airdrop is not available now :(");
-        require(
-            contractState == Status.ACTIVE,
-            "The Contract is not available now :("
-        );
+        require(contractState == Status.ACTIVE,"The Contract is not available now :(");
         furnace = 0xf000000000000000000000000000000000000000;
 
         for (uint256 i = 0; i < tokenOwners.length; i++) {
-            addressToBalance[tokenOwners[i]] = addressToBalance[tokenOwners[i]]
-                .percent(value);
+          addressToBalance[tokenOwners[i]] = addressToBalance[tokenOwners[i]].percent(value);
 
-            emit Transfer(
-                tokenOwners[i],
-                furnace,
-                addressToBalance[tokenOwners[i]]
-            );
+        emit Transfer(tokenOwners[i],furnace,addressToBalance[tokenOwners[i]]);
         }
         totalsupply = totalsupply.percent(value);
-
         return true;
     }
 
     function autoBurn(uint256 value) public isOwner {
-        require(
-            contractState == Status.ACTIVE,
-            "The Contract is not available now :("
-        );
+        require(contractState == Status.ACTIVE,"The Contract is not available now :(");
         burnable = value;
         burn(burnable);
     }
 
-    function transfer(address receiver, uint256 quantity)
-        public
-        override
-        isOwner
-        returns (bool)
-    {
-
-        require(
-            contractState == Status.ACTIVE,
-            "The Contract is not available now :("
-        );
-        require(
-            quantity <= addressToBalance[owner],
-            "Insufficient Balance to Transfer"
-        );
+    function transfer(address receiver, uint256 quantity) public override isOwner returns (bool){
+        require(contractState == Status.ACTIVE,"The Contract is not available now :(");
+        require(quantity <= addressToBalance[owner],"Insufficient Balance to Transfer");
         addressToBalance[owner] = addressToBalance[owner] - quantity;
         addressToBalance[receiver] = addressToBalance[receiver] + quantity;
         tokenOwners.push(receiver);
@@ -135,10 +102,7 @@ contract CryptoToken is IERC20 {
 
     //Mint: Adicionar tokens ao total supply
     function mintToken() public isOwner {
-        require(
-            contractState == Status.ACTIVE,
-            "The Contract is not available now :("
-        );
+        require(contractState == Status.ACTIVE,"The Contract is not available now :(");
         uint256 amount = 1000;
         if (balanceOf(owner) < 1001) {
             totalsupply += amount;
