@@ -35,11 +35,16 @@ describe("vending", async () => {
     const vending = await VENDING.deploy(tokenTest.address);
     await vending.deployed();
 
-    await vending.restockGama();
+    await tokenTest.approve(vending.address,1000);
 
-
-    expect(1000).to.equal(await vending.getVendingMachineBalanceGama());
+    console.log(await tokenTest.allowence(owner.address,vending.address))
     
+    await vending.restockGama();
+    
+    console.log(await vending.getVendingMachineBalanceGama())
+
+    console.log(await tokenTest.totalSupply());
+    expect(1000).to.equal(await vending.getVendingMachineBalanceGama());
     
     
     
@@ -48,13 +53,26 @@ describe("vending", async () => {
 
       
     });
+    console.log(await tokenTest.allowence(owner.address,vending.address));
 
-    expect(1000).to.equal(await vending.getVendingMachineBalanceGama());
+    console.log(await vending.getVendingMachineBalanceGama());
 
-    expect(await vending.contractBalance()).to.equal("1000000000000000000000")
 
+    await tokenTest.mintToken();
+
+    await tokenTest.approve(vending.address,1000);
+
+    await vending.restockGama();
+
+    console.log(await tokenTest.totalSupply());
+  
     
-    expect(1000).to.equal(await vending.getVendingMachineBalanceGama());
+
+     expect(1000).to.equal(await vending.getVendingMachineBalanceGama());
+
+     expect(await vending.contractBalance()).to.equal("1000000000000000000000")
+ 
+    
   });
 
  
@@ -199,6 +217,10 @@ describe("vending", async () => {
 
     await vending.setGamaBuyValue(2);
 
+    await tokenTest.approve(vending.address,1000);
+
+    console.log(await tokenTest.allowence(owner.address,vending.address))
+    
     await vending.restockGama();
 
     await vending.purchaseGama(320, {
@@ -232,6 +254,9 @@ describe("vending", async () => {
     const VENDING = await ethers.getContractFactory("VendingMachine");
     const vending = await VENDING.deploy(tokenTest.address);
     await vending.deployed();
+
+    await tokenTest.approve(vending.address,1000);
+    
 
     await vending.restockGama();
 
